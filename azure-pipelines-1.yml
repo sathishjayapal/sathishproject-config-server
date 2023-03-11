@@ -26,5 +26,5 @@ steps:
   inputs:
     containerRegistry: 'Docker-Connect'
     repository: 'sathishjatdot'
-    command: 'build'
+    command: 'buildAndPush'
     Dockerfile: '**/Dockerfile'
