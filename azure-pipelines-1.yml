@@ -24,7 +24,7 @@ steps:
     sonarQubeRunAnalysis: false
 - task: Docker@2
   inputs:
-    containerRegistry: 'https://index.docker.io/v1/'
+    containerRegistry: 'Docker-Connect'
     repository: 'sathishjatdot'
-    command: 'buildAndPush'
+    command: 'build'
     Dockerfile: '**/Dockerfile'
