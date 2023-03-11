@@ -28,3 +28,8 @@ steps:
     repository: 'sathishjatdot'
     command: 'build'
     Dockerfile: '**/Dockerfile'
+- task: Docker@2
+  inputs:
+    containerRegistry: 'Docker-Connect'
+    repository: 'sathishjatdot'
+    command: 'push'
