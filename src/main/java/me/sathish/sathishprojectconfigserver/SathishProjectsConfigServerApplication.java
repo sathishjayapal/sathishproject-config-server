@@ -8,6 +8,7 @@ import org.springframework.cloud.config.server.EnableConfigServer;
 @SpringBootApplication
 public class SathishProjectsConfigServerApplication {
     public static void main(String[] args) {
+        System.out.println("The args passed is " + args[0]);
         System.out.println("Config server running for all Sathish Projects");
         SpringApplication.run(SathishProjectsConfigServerApplication.class, args);
     }
