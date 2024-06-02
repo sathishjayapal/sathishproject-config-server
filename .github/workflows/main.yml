@@ -19,6 +19,8 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
           cache: maven
+      - name: clean spotify maven
+        run: mvn spotless:apply
       -
         name: Build maven
         run: mvn -batch-mode -DskipTests=true --update-snapshots verify
