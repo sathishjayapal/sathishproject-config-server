@@ -20,6 +20,7 @@ public class WebSecurityConfig {
     public WebSecurityConfig(BasicAuthBean environment) {
         this.environment = environment;
     }
+
     @Value("${spring.security.debug:false}")
     boolean securityDebug;
 
