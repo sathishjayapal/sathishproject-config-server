@@ -29,4 +29,4 @@ jobs:
         run: |
           mvn package jib:dockerBuild -DskipTests 
           docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.OCKERHUB_TOKEN }}
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/sathishprojects_config_server:latest
+          docker push travelhelper0h/sathishprojects_config_server:latest
