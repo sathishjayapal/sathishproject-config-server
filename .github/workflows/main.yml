@@ -33,7 +33,6 @@ jobs:
         uses: docker/setup-buildx-action@v2
       -
         name: Build and push
-        uses: docker/build-push-action@v4
         run: |
           mvn clean package jib:dockerBuild -DskipTests 
           dockerlogin:login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.OCKERHUB_TOKEN }}
