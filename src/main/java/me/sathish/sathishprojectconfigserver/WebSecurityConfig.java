@@ -1,38 +1,54 @@
 package me.sathish.sathishprojectconfigserver;
 
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
+@Configuration
 @EnableWebSecurity(debug = true)
-public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-    final
-    BasicAuthBean environment;
+@EnableMethodSecurity(securedEnabled = true, jsr250Enabled = true)
+public class WebSecurityConfig {
+    final BasicAuthBean environment;
 
     public WebSecurityConfig(BasicAuthBean environment) {
         this.environment = environment;
     }
+    @Value("${spring.security.debug:false}")
+    boolean securityDebug;
 
-    //
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication()
-                .passwordEncoder(new BCryptPasswordEncoder())
-                .withUser(environment.getUsername())
-                .password(environment.getPassword())
-                .roles("ADMIN")
-        ;
+    @Bean
+    public BCryptPasswordEncoder bCryptPasswordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
-                .anyRequest().authenticated()
-                .and()
-                .httpBasic();
+    @Bean
+    public UserDetailsService userDetailsService() {
+        InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
+        manager.createUser(
+                User.withUsername(environment.getUsername())
+                        .password(bCryptPasswordEncoder().encode(environment.getPassword()))
+                        .roles("USER")
+                        .build());
+        manager.createUser(
+                User.withUsername(environment.getUsername() + "Admin")
+                        .password(bCryptPasswordEncoder().encode(environment.getPassword()))
+                        .roles("USER", "ADMIN")
+                        .build());
+        return manager;
+    }
+
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        return web ->
+                web.debug(securityDebug)
+                        .ignoring()
+                        .requestMatchers("/css/**", "/js/**", "/img/**", "/lib/**", "/favicon.ico");
     }
 }
-
-
