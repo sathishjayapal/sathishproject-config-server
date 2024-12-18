@@ -1,0 +1,11 @@
+{
+  "description": "This is a repo for an Amazon ECR.",
+  "architectures": [
+    "x86"
+  ],
+  "operatingSystems": [
+    "Linux"
+  ],
+  "aboutText": "This repository is used by sathish.",
+  "usageText": "This repository is not for public use."
+}
