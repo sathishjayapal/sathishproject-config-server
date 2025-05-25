@@ -8,7 +8,7 @@ echo "\n-----------------------------------------------------\n"
 
 echo "Installing NGINX Ingress..."
 
-kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
+kubectl apply -f https://raw.githubusercontent.com/sathishjayapal/sathishproject-config-server/refs/heads/main/config/k8s/kind-cluster-config.yaml
 
 echo "\n-----------------------------------------------------\n"
 
