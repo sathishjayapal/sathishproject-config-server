@@ -27,8 +27,6 @@ spring:
   docker:
     compose:
       enabled: off
-server:
-  port: 8888
 # http://localhost:8888/wi-traffic-alerts-url/dev/main dev here is the profile and main in the url
 # branch or the main branch name
 management:
