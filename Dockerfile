@@ -16,7 +16,7 @@ ENV encrypt_key=${encrypt_key}
 ENV username=${username}
 ENV pass=${pass}
 
-CMD echo ${JAR_FILE} && echo "${GIT_URI}" && echo "${encrypt_key}" && echo "${username}" && echo "${pass}"
+RUN echo ${JAR_FILE} && echo "${GIT_URI}" && echo "${encrypt_key}" && echo "${username}" && echo "${pass}"
 # Set the working directory in the container
 WORKDIR /builder
 
