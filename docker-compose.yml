@@ -1,0 +1,27 @@
+services:
+  config-server:
+    container_name: sathish-config-server
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        JAR_FILE: target/sathishconfigserver.jar
+        APP_PORT: 8888
+        GIT_URI: ${GIT_URI}
+        encrypt_key: ${encrypt_key}
+        username: ${username}
+        pass: ${pass}
+    ports:
+      - "8888:8888"
+    environment:
+      - GIT_URI=${GIT_URI}
+      - encrypt_key=${encrypt_key}
+      - username=${username}
+      - pass=${pass}
+      - APP_PORT=8888
+    networks:
+      - config_net
+
+networks:
+  config_net:
+    driver: bridge

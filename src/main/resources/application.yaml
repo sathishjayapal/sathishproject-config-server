@@ -1,3 +1,5 @@
+server:
+  port: 8888
 spring:
   application:
     name: sathish-projects-git-config-server
@@ -26,7 +28,7 @@ spring:
       enabled: true
   docker:
     compose:
-      enabled: off
+      enabled: false
 # http://localhost:8888/wi-traffic-alerts-url/dev/main dev here is the profile and main in the url
 # branch or the main branch name
 management:
