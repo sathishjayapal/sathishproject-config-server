@@ -4,12 +4,14 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity(debug = false)
@@ -23,6 +25,19 @@ public class WebSecurityConfig {
 
     @Value("${spring.security.debug:false}")
     boolean securityDebug;
+
+    @Bean
+    public SecurityFilterChain securityWebFilterChain(HttpSecurity http) throws Exception {
+        return http.authorizeHttpRequests(
+                        auth ->
+                                auth.requestMatchers("/actuator/**")
+                                        .permitAll()
+                                        .anyRequest()
+                                        .authenticated())
+                .httpBasic(httpBasic -> {})
+                .csrf(csrf -> csrf.disable())
+                .build();
+    }
 
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
