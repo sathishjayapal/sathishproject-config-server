@@ -2,6 +2,8 @@
 server:
   port: 8888
 spring:
+  jackson:
+    indent_output: true
   application:
     name: sathish-projects-git-config-server
   h2:
@@ -33,16 +35,17 @@ spring:
 # http://localhost:8888/wi-traffic-alerts-url/dev/main dev here is the profile and main in the url
 # branch or the main branch name
 management:
+  endpoints:
+    web:
+      base-path: /sathishconfigserver
+      exposure:
+        include: "*"
   endpoint:
     health:
       info: true
       show-details: always
     refresh:
       enabled: true
-  endpoints:
-    web:
-      exposure:
-        include: "*"
   info:
     git:
       enabled: on

@@ -1,6 +1,7 @@
 pass: Pass
 username: Sathish
 spring:
+
   application:
     name: sathish-projects-git-config-server
   h2:
@@ -28,6 +29,7 @@ spring:
 server:
   port: 8888
 management:
+  context-path: /sathishconfigserver
   endpoint:
     health:
       show-details: always

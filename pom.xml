@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.4.2</version>
+        <version>3.5.7</version>
         <relativePath/>
     </parent>
     <groupId>me.sathish</groupId>
@@ -16,7 +16,7 @@
     <properties>
         <java.version>21</java.version>
         <spotless.version>2.37.0</spotless.version>
-        <spring-cloud.version>2024.0.0</spring-cloud.version>
+        <spring-cloud.version>2025.0.0</spring-cloud.version>
         <dockerImageName>travelhelper0h/sathishproject-config-server</dockerImageName>
     </properties>
     <dependencies>
@@ -142,6 +142,22 @@
                     <to>
                         <image>travelhelper0h/${project.artifactId}:latest</image>
                     </to>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>pl.project13.maven</groupId>
+                <artifactId>git-commit-id-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>revision</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <generateGitPropertiesFile>true</generateGitPropertiesFile>
+                    <generateGitPropertiesFilename>${project.build.outputDirectory}/git.properties</generateGitPropertiesFilename>
+                    <failOnNoGitDirectory>false</failOnNoGitDirectory>
                 </configuration>
             </plugin>
         </plugins>
