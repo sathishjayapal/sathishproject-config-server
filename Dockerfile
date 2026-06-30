@@ -1,41 +1,31 @@
-# Use an official OpenJDK runtime as a parent image
-FROM bellsoft/liberica-openjre-debian:21 AS builder
-# Define build arguments
-ARG JAR_FILE=target/*.jar
-ARG APP_PORT
-ARG GIT_URI
-ARG encrypt_key
-ARG username
-ARG pass
+# Stage 1: Build
+FROM eclipse-temurin:21-jdk-alpine AS build
+WORKDIR /app
+COPY .mvn/ .mvn/
+COPY mvnw pom.xml ./
+RUN chmod +x mvnw && ./mvnw dependency:go-offline -B
+COPY src/ src/
+RUN ./mvnw package -DskipTests -B && mv target/*.jar target/app.jar
 
-# Set environment variables
-ENV JAR_FILE=${JAR_FILE}
-ENV APP_PORT=${APP_PORT}
-ENV GIT_URI=${GIT_URI}
-ENV encrypt_key=${encrypt_key}
-ENV username=${username}
-ENV pass=${pass}
-
-RUN echo ${JAR_FILE} && echo "${GIT_URI}" && echo "${encrypt_key}" && echo "${username}" && echo "${pass}"
-# Set the working directory in the container
+# Stage 2: Extract layers (Spring Boot layer tools for faster pulls)
+FROM eclipse-temurin:21-jdk-alpine AS extract
 WORKDIR /builder
-
-# Copy the project's JAR file into the container at /app
-COPY ${JAR_FILE} application.jar
+COPY --from=build /app/target/app.jar application.jar
 RUN java -Djarmode=tools -jar application.jar extract --layers --destination extracted
 
-# This is the runtime container
-FROM bellsoft/liberica-openjre-debian:21-cds
+# Stage 3: Runtime — all secrets come in at runtime via environment variables
+FROM eclipse-temurin:21-jre-alpine
+RUN addgroup -S appgrp && adduser -S appuser -G appgrp
 WORKDIR /application
-COPY --from=builder /builder/extracted/dependencies/ ./
-COPY --from=builder /builder/extracted/spring-boot-loader/ ./
-COPY --from=builder /builder/extracted/snapshot-dependencies/ ./
-COPY --from=builder /builder/extracted/application/ ./
-COPY --from=builder /builder/application.jar application.jar
+COPY --from=extract /builder/extracted/dependencies/ ./
+COPY --from=extract /builder/extracted/spring-boot-loader/ ./
+COPY --from=extract /builder/extracted/snapshot-dependencies/ ./
+COPY --from=extract /builder/extracted/application/ ./
 
-# Make port available to the world outside this container
-EXPOSE ${APP_PORT}
+USER appuser
+EXPOSE 8888
 
-# Run the JAR file
-ENTRYPOINT ["java", "-XX:SharedArchiveFile=application.jsa", "-jar", "application.jar"]
+# Runtime env vars — supply these in docker-compose or Portainer stack env
+# ENV GIT_URI, encrypt_key, SPRING_SECURITY_USER_NAME, SPRING_SECURITY_USER_PASSWORD
 
+ENTRYPOINT ["java", "-jar", "application.jar"]
