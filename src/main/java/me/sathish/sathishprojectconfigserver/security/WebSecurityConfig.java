@@ -1,6 +1,7 @@
 package me.sathish.sathishprojectconfigserver.security;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -30,7 +31,7 @@ public class WebSecurityConfig {
     public SecurityFilterChain securityWebFilterChain(HttpSecurity http) throws Exception {
         return http.authorizeHttpRequests(
                         auth ->
-                                auth.requestMatchers("/actuator/**")
+                                auth.requestMatchers(EndpointRequest.toAnyEndpoint())
                                         .permitAll()
                                         .anyRequest()
                                         .authenticated())
