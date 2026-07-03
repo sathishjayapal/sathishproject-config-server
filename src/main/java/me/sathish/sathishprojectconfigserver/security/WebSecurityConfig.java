@@ -1,12 +1,10 @@
 package me.sathish.sathishprojectconfigserver.security;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -23,14 +21,17 @@ public class WebSecurityConfig {
         this.environment = environment;
     }
 
-    @Value("${spring.security.debug:false}")
-    boolean securityDebug;
-
     @Bean
     public SecurityFilterChain securityWebFilterChain(HttpSecurity http) throws Exception {
         return http.authorizeHttpRequests(
                         auth ->
-                                auth.requestMatchers("/actuator/**")
+                                auth.requestMatchers(
+                                                "/actuator/**",
+                                                "/css/**",
+                                                "/js/**",
+                                                "/img/**",
+                                                "/lib/**",
+                                                "/favicon.ico")
                                         .permitAll()
                                         .anyRequest()
                                         .authenticated())
@@ -58,13 +59,5 @@ public class WebSecurityConfig {
                         .roles("USER", "ADMIN")
                         .build());
         return manager;
-    }
-
-    @Bean
-    public WebSecurityCustomizer webSecurityCustomizer() {
-        return web ->
-                web.debug(securityDebug)
-                        .ignoring()
-                        .requestMatchers("/css/**", "/js/**", "/img/**", "/lib/**", "/favicon.ico");
     }
 }
