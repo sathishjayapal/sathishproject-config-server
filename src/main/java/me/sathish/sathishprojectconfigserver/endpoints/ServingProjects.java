@@ -5,7 +5,7 @@ import org.springframework.boot.actuate.endpoint.annotation.ReadOperation;
 import org.springframework.stereotype.Component;
 
 @Component
-@Endpoint(id = "serving-projects")
+@Endpoint(id = "servingProjects")
 public class ServingProjects {
     @ReadOperation
     public String getProjects() {
