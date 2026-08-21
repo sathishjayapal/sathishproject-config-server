@@ -16,8 +16,7 @@ focussed on the config server.
 ##Docker documentation
 
 * docker images
-* docker build -t travelhelper0h/sathishconfigserver .
-* docker push travelhelper0h/sathishconfigserver
+* docker buildx build --platform linux/amd64,linux/arm64 -t travelhelper0h/sathishproject-config-server:latest --push .
 * docker run --rm -e username='someusername' -e pass='somepass' -p 8888:8888 travelhelper0h/sathishproject-config-server
 
 ### Guides
